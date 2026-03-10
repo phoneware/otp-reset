@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Wireframe: OTP Reset SPA</title>
+<style>
+  /* === BASE === */
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: system-ui, sans-serif; background: #f5f5f5; color: #333; padding: 40px 20px; }
+  h1 { text-align: center; font-size: 18px; color: #666; margin-bottom: 8px; }
+  .subtitle { text-align: center; font-size: 13px; color: #999; margin-bottom: 40px; }
+
+  /* === LAYOUT === */
+  .flow { display: flex; gap: 24px; justify-content: center; align-items: flex-start; flex-wrap: wrap; }
+  .arrow { display: flex; align-items: center; font-size: 28px; color: #bbb; padding-top: 140px; }
+
+  /* === SCREEN CARDS === */
+  .screen { width: 300px; background: #fff; border: 2px solid #ddd; border-radius: 12px; overflow: hidden; }
+  .screen-header {
+    background: #e8e8e8; padding: 10px 14px; font-size: 11px; font-weight: 600;
+    color: #888; text-transform: uppercase; letter-spacing: 0.5px; border-bottom: 2px solid #ddd;
+  }
+  .screen-body { padding: 20px 16px; }
+  .screen-title { font-size: 18px; font-weight: 700; margin-bottom: 6px; }
+  .screen-desc { font-size: 12px; color: #888; margin-bottom: 20px; line-height: 1.4; }
+
+  /* === USER INFO BAR === */
+  .user-info {
+    background: #f8f8f8; border: 1px solid #e0e0e0; border-radius: 8px;
+    padding: 10px 12px; margin-bottom: 16px; font-size: 12px; color: #666; line-height: 1.6;
+  }
+  .user-info strong { color: #333; }
+
+  /* === FORM FIELDS === */
+  .field-label { font-size: 12px; font-weight: 600; color: #555; margin-bottom: 6px; }
+  .field { border: 2px dashed #ccc; border-radius: 8px; padding: 10px 12px; margin-bottom: 4px; font-size: 13px; color: #aaa; }
+  .field.filled { border-style: solid; color: #333; }
+  .field-hint { font-size: 11px; color: #aaa; margin-bottom: 14px; }
+
+  /* === DEVICE DETAIL CARD === */
+  .device-card {
+    border: 2px solid #e0e0e0; border-radius: 8px; padding: 14px;
+    margin-bottom: 16px; background: #fafafa;
+  }
+  .device-card .row {
+    display: flex; justify-content: space-between; padding: 6px 0;
+    font-size: 13px; border-bottom: 1px solid #eee;
+  }
+  .device-card .row:last-child { border-bottom: none; }
+  .device-card .label { color: #888; }
+  .device-card .value { font-weight: 600; color: #333; }
+  .device-card .value.mono { font-family: monospace; }
+  .device-card .value.status-off { color: #c62828; }
+  .device-card .value.status-on { color: #2e7d32; }
+
+  /* === BUTTONS === */
+  .btn {
+    width: 100%; padding: 12px; border-radius: 8px; border: none;
+    font-size: 14px; font-weight: 600; cursor: default; margin-bottom: 8px; text-align: center;
+  }
+  .btn-primary { background: #888; color: #fff; }
+  .btn-secondary { background: #f0f0f0; color: #666; }
+  .btn-disabled { background: #d0d0d0; color: #999; }
+
+  /* === STATUS BANNERS === */
+  .banner {
+    border-radius: 8px; padding: 12px 14px; margin-top: 14px; font-size: 13px; line-height: 1.5;
+  }
+  .banner-success { background: #e8f5e9; border: 1px solid #a5d6a7; color: #2e7d32; }
+  .banner-error { background: #fbe9e7; border: 1px solid #ef9a9a; color: #c62828; }
+  .banner-warn { background: #fff8e1; border: 1px solid #ffe082; color: #e65100; }
+  .banner-title { font-weight: 700; margin-bottom: 4px; }
+
+  /* === FLOW NOTES === */
+  .note {
+    background: #fffde7; border: 1px solid #fff176; border-radius: 6px;
+    padding: 10px 12px; font-size: 11px; color: #666; margin-top: 14px; line-height: 1.4;
+  }
+  .note strong { color: #333; }
+
+  /* === PORTAL CHROME === */
+  .portal-chrome {
+    background: #2c2c2c; border-radius: 12px 12px 0 0; padding: 10px 14px;
+    display: flex; gap: 10px; align-items: center;
+  }
+  .portal-chrome .menu-item {
+    font-size: 11px; color: #ccc; background: #444; padding: 5px 10px;
+    border-radius: 4px; display: inline-block;
+  }
+  .portal-chrome .menu-item.active { background: #666; color: #fff; }
+
+  .iframe-border {
+    border: 2px dashed #bbb; border-radius: 0 0 12px 12px; padding: 16px;
+    background: #fafafa;
+  }
+  .iframe-label { font-size: 10px; color: #bbb; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px; }
+</style>
+</head>
+<body>
+
+<h1>Reseller OTP Reset Tool</h1>
+<p class="subtitle">Wireframe &mdash; Unit: React OTP Reset SPA &mdash; AI-DLC Elaboration Artifact</p>
+
+<div class="flow">
+
+  <!-- SCREEN 1: MAC Input -->
+  <div>
+    <div class="portal-chrome">
+      <span class="menu-item">Admin UI &#9662;</span>
+      <span class="menu-item active">OTP Reset</span>
+      <span class="menu-item">Docs &#9662;</span>
+    </div>
+    <div class="iframe-border">
+      <div class="iframe-label">&#8592; iframe</div>
+      <div class="screen" style="width: 100%; border: none;">
+        <div class="screen-header">Step 1 &mdash; Enter MAC</div>
+        <div class="screen-body">
+          <div class="screen-title">Enable Global OTP</div>
+          <div class="screen-desc">Look up a device to enable global OTP.</div>
+
+          <div class="user-info">
+            <strong>jsmith</strong> &middot; Reseller<br>
+            Territory: <strong>PhonewareCo</strong><br>
+            Domain: <strong>example.domain.com</strong>
+          </div>
+
+          <div class="field-label">MAC Address</div>
+          <div class="field">00:A1:B2:C3:D4:E5</div>
+          <div class="field-hint">With or without colons/dashes. Auto-stripped.</div>
+
+          <div class="btn btn-primary">Look Up Device</div>
+
+          <div class="note">
+            <strong>Flow:</strong> User enters MAC &rarr; clicks Look Up &rarr; app calls <code>GET /domains/{domain}/phones/{mac}</code> &rarr; shows device preview for confirmation.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="arrow">&rarr;</div>
+
+  <!-- SCREEN 2: Device Preview / Confirm -->
+  <div class="screen">
+    <div class="screen-header">Step 2 &mdash; Confirm Device</div>
+    <div class="screen-body">
+      <div class="screen-title">Confirm Device</div>
+      <div class="screen-desc">Verify this is the correct device before enabling OTP.</div>
+
+      <div class="device-card">
+        <div class="row">
+          <span class="label">MAC</span>
+          <span class="value mono">00A1B2C3D4E5</span>
+        </div>
+        <div class="row">
+          <span class="label">Model</span>
+          <span class="value">Yealink T54W</span>
+        </div>
+        <div class="row">
+          <span class="label">Domain</span>
+          <span class="value">example.domain.com</span>
+        </div>
+        <div class="row">
+          <span class="label">Reseller</span>
+          <span class="value">PhonewareCo</span>
+        </div>
+        <div class="row">
+          <span class="label">Line 1</span>
+          <span class="value">1001@example.domain.com</span>
+        </div>
+        <div class="row">
+          <span class="label">Global OTP</span>
+          <span class="value status-off">Not Enabled</span>
+        </div>
+      </div>
+
+      <div class="btn btn-primary">Enable Global OTP</div>
+      <div class="btn btn-secondary">Back</div>
+
+      <div class="note">
+        <strong>Data shown:</strong> Key fields from the NdpPhone response. User confirms this is the right device before proceeding. "Back" returns to MAC input.
+      </div>
+    </div>
+  </div>
+
+  <div class="arrow">&rarr;</div>
+
+  <!-- SCREEN 3: Result -->
+  <div class="screen">
+    <div class="screen-header">Step 3 &mdash; Result</div>
+    <div class="screen-body">
+      <div class="screen-title" style="margin-bottom: 14px;">Result</div>
+
+      <div class="banner banner-success">
+        <div class="banner-title">&#10003; Global OTP Enabled</div>
+        <strong>00A1B2C3D4E5</strong> (Yealink T54W) now has global OTP enabled.
+      </div>
+
+      <div style="margin-top: 16px;">
+        <div class="btn btn-primary">Reset Another Device</div>
+      </div>
+
+      <div class="note">
+        <strong>Action:</strong> "Reset Another Device" clears the form and returns to Step 1.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Error States -->
+<h2 style="text-align: center; font-size: 15px; color: #888; margin-top: 48px; margin-bottom: 24px;">Error States</h2>
+
+<div style="display: flex; gap: 24px; justify-content: center; flex-wrap: wrap;">
+
+  <div class="screen">
+    <div class="screen-header">Error &mdash; Access Denied</div>
+    <div class="screen-body">
+      <div class="banner banner-error" style="margin-top: 0;">
+        <div class="banner-title">&#10007; Access Denied</div>
+        Device <strong>00A1B2C3D4E5</strong> belongs to territory <strong>OtherReseller</strong>. You can only enable OTP for devices in your territory.
+      </div>
+      <div class="btn btn-secondary" style="margin-top: 14px;">Try Another MAC</div>
+      <div class="note">
+        <strong>Trigger:</strong> Reseller scope and <code>phone.reseller !== jwt.territory</code>. Shown at Step 2 instead of the confirm card.
+      </div>
+    </div>
+  </div>
+
+  <div class="screen">
+    <div class="screen-header">Error &mdash; Device Not Found</div>
+    <div class="screen-body">
+      <div class="banner banner-warn" style="margin-top: 0;">
+        <div class="banner-title">&#10007; Device Not Found</div>
+        No device with MAC <strong>00A1B2C3D4E5</strong> found in domain <strong>example.domain.com</strong>.
+      </div>
+      <div class="btn btn-secondary" style="margin-top: 14px;">Try Another MAC</div>
+      <div class="note">
+        <strong>Trigger:</strong> <code>GET /domains/{domain}/phones/{mac}</code> returns 404.
+      </div>
+    </div>
+  </div>
+
+  <div class="screen">
+    <div class="screen-header">Error &mdash; Session Expired</div>
+    <div class="screen-body">
+      <div class="banner banner-error" style="margin-top: 0;">
+        <div class="banner-title">Session Expired</div>
+        Your portal session has expired. Please refresh the Manager Portal page.
+      </div>
+      <div class="note">
+        <strong>Trigger:</strong> NS API returns 401/403. No retry &mdash; user refreshes portal.
+      </div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>
