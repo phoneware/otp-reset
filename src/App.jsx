@@ -1,6 +1,6 @@
 import { useState, useCallback } from 'react'
 import { decodeJwt, isTokenExpired } from './utils/jwt.js'
-import { getPhone, enableGlobalOtp } from './api/ns.js'
+import { getPhone, enableGlobalOtp, setParentOrigin } from './api/ns.js'
 import { usePortalMessage } from './hooks/usePortalMessage.js'
 import { useHeightReporter } from './hooks/useHeightReporter.js'
 import UserInfoBar from './components/UserInfoBar.jsx'
@@ -32,6 +32,7 @@ export default function App() {
       setStep('error')
       return
     }
+    setParentOrigin(data.origin)
     setSession({
       token: data.token,
       domain: data.domain,

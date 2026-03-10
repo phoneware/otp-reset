@@ -64,7 +64,9 @@
       );
     };
 
-    // Listen for setHeight messages from iframe
+    var API_BASE = 'https://edge.phoneware.cloud';
+
+    // Listen for messages from iframe
     window.addEventListener('message', function (event) {
       if (event.origin !== SPA_ORIGIN) {
         return;
@@ -80,7 +82,48 @@
           frame.style.height = height + 'px';
         }
       }
+      // Proxy API requests from iframe to avoid CORS
+      if (data && data.type === 'apiRequest') {
+        handleApiRequest(data, event.source);
+      }
     });
+
+    function handleApiRequest(data, source) {
+      var promise;
+      if (data.action === 'getPhone') {
+        promise = fetch(API_BASE + '/domains/' + data.domain + '/phones/' + data.mac, {
+          headers: { Authorization: 'Bearer ' + data.token },
+        }).then(function (res) {
+          if (res.status === 404) throw new Error('NOT_FOUND');
+          if (res.status === 401 || res.status === 403) throw new Error('SESSION_EXPIRED');
+          if (!res.ok) throw new Error('NETWORK_ERROR');
+          return res.json();
+        });
+      } else if (data.action === 'enableOtp') {
+        var body = Object.assign({}, data.phone, { 'global-one-time-pass': 'yes' });
+        promise = fetch(API_BASE + '/domains/' + data.domain + '/phones', {
+          method: 'PUT',
+          headers: {
+            Authorization: 'Bearer ' + data.token,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(body),
+        }).then(function (res) {
+          if (res.status === 401 || res.status === 403) throw new Error('SESSION_EXPIRED');
+          if (!res.ok) throw new Error('NETWORK_ERROR');
+          return { ok: true };
+        });
+      } else {
+        return;
+      }
+      promise
+        .then(function (result) {
+          source.postMessage({ type: 'apiResponse', id: data.id, result: result }, SPA_ORIGIN);
+        })
+        .catch(function (err) {
+          source.postMessage({ type: 'apiResponse', id: data.id, error: err.message }, SPA_ORIGIN);
+        });
+    }
   } catch (e) {
     // Silent exit - do not break non-portal pages
   }

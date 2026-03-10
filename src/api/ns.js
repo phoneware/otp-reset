@@ -1,26 +1,40 @@
-const BASE_URL = 'https://edge.phoneware.cloud'
+let parentOrigin = null
+let requestId = 0
+const pendingRequests = new Map()
+
+export function setParentOrigin(origin) {
+  parentOrigin = origin
+}
+
+function proxyFetch(request) {
+  return new Promise((resolve, reject) => {
+    if (!parentOrigin) {
+      reject(new Error('NETWORK_ERROR'))
+      return
+    }
+    const id = ++requestId
+    pendingRequests.set(id, { resolve, reject })
+    window.parent.postMessage({ type: 'apiRequest', id, ...request }, parentOrigin)
+  })
+}
+
+window.addEventListener('message', (event) => {
+  const data = event.data
+  if (!data || data.type !== 'apiResponse') return
+  const pending = pendingRequests.get(data.id)
+  if (!pending) return
+  pendingRequests.delete(data.id)
+  if (data.error) {
+    pending.reject(new Error(data.error))
+  } else {
+    pending.resolve(data.result)
+  }
+})
 
 export async function getPhone(domain, mac, token) {
-  const res = await fetch(`${BASE_URL}/domains/${domain}/phones/${mac}`, {
-    headers: { Authorization: `Bearer ${token}` },
-  })
-  if (res.status === 404) throw new Error('NOT_FOUND')
-  if (res.status === 401 || res.status === 403) throw new Error('SESSION_EXPIRED')
-  if (!res.ok) throw new Error('NETWORK_ERROR')
-  return res.json()
+  return proxyFetch({ action: 'getPhone', domain, mac, token })
 }
 
 export async function enableGlobalOtp(domain, phone, token) {
-  const body = { ...phone, 'global-one-time-pass': 'yes' }
-  const res = await fetch(`${BASE_URL}/domains/${domain}/phones`, {
-    method: 'PUT',
-    headers: {
-      Authorization: `Bearer ${token}`,
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(body),
-  })
-  if (res.status === 401 || res.status === 403) throw new Error('SESSION_EXPIRED')
-  if (!res.ok) throw new Error('NETWORK_ERROR')
-  return res
+  return proxyFetch({ action: 'enableOtp', domain, phone, token })
 }
