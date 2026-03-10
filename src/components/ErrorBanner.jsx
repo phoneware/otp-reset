@@ -4,8 +4,7 @@ export default function ErrorBanner({ type, mac, territory, domain, onTryAnother
       <div>
         <div className="banner banner-error">
           <div className="banner-title">&#10007; Access Denied</div>
-          Device <strong>{mac}</strong> belongs to territory <strong>{territory}</strong>.
-          You can only enable OTP for devices in your territory.
+          You do not have permission to access device <strong>{mac}</strong>.
         </div>
         <button className="btn btn-secondary" style={{ marginTop: 14 }} onClick={onTryAnother}>
           Try Another MAC

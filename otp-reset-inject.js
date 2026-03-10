@@ -105,7 +105,20 @@
           headers: { Authorization: 'Bearer ' + data.token },
         }).then(function (res) {
           if (res.status === 404) throw new Error('NOT_FOUND');
-          if (res.status === 401 || res.status === 403) throw new Error('SESSION_EXPIRED');
+          if (res.status === 401 || res.status === 403) {
+            var token = localStorage.getItem('ns_t');
+            if (token) {
+              try {
+                var payload = JSON.parse(atob(token.split('.')[1]));
+                if (payload.exp && payload.exp > Date.now() / 1000) {
+                  throw new Error('ACCESS_DENIED');
+                }
+              } catch (e) {
+                if (e.message === 'ACCESS_DENIED') throw e;
+              }
+            }
+            throw new Error('SESSION_EXPIRED');
+          }
           if (!res.ok) throw new Error('NETWORK_ERROR');
           return res.json();
         });
@@ -119,7 +132,20 @@
           },
           body: JSON.stringify(body),
         }).then(function (res) {
-          if (res.status === 401 || res.status === 403) throw new Error('SESSION_EXPIRED');
+          if (res.status === 401 || res.status === 403) {
+            var putToken = localStorage.getItem('ns_t');
+            if (putToken) {
+              try {
+                var putPayload = JSON.parse(atob(putToken.split('.')[1]));
+                if (putPayload.exp && putPayload.exp > Date.now() / 1000) {
+                  throw new Error('ACCESS_DENIED');
+                }
+              } catch (e) {
+                if (e.message === 'ACCESS_DENIED') throw e;
+              }
+            }
+            throw new Error('SESSION_EXPIRED');
+          }
           if (!res.ok) throw new Error('NETWORK_ERROR');
           return { ok: true };
         });
