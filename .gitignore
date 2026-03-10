@@ -1,1 +1,3 @@
 .ai-dlc/worktrees/
+node_modules
+dist
