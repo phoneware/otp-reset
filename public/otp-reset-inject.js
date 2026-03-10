@@ -91,7 +91,7 @@
     function handleApiRequest(data, source) {
       var promise;
       if (data.action === 'getPhone') {
-        promise = fetch(API_BASE + '/domains/' + data.domain + '/phones/' + data.mac, {
+        promise = fetch(API_BASE + '/ns-api/v2/phones/' + data.mac, {
           headers: { Authorization: 'Bearer ' + data.token },
         }).then(function (res) {
           if (res.status === 404) throw new Error('NOT_FOUND');
@@ -101,7 +101,8 @@
         });
       } else if (data.action === 'enableOtp') {
         var body = Object.assign({}, data.phone, { 'global-one-time-pass': 'yes' });
-        promise = fetch(API_BASE + '/domains/' + data.domain + '/phones', {
+        var mac = data.phone['device-provisioning-mac-address'];
+        promise = fetch(API_BASE + '/ns-api/v2/phones/' + mac, {
           method: 'PUT',
           headers: {
             Authorization: 'Bearer ' + data.token,
