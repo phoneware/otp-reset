@@ -124,7 +124,7 @@ export default function App() {
   return (
     <div ref={containerRef} className="app">
       <div className="screen-body">
-        {step !== 'error' && step !== 'result' && step !== 'result-error' && (
+        {step === 'mac-input' && (
           <>
             <div className="screen-title">Enable Global OTP</div>
             <div className="screen-desc">Look up a device to enable global OTP.</div>
@@ -134,11 +134,8 @@ export default function App() {
               territory={session.territory}
               domain={session.domain}
             />
+            <MacInput onLookup={handleLookup} loading={loading} />
           </>
-        )}
-
-        {step === 'mac-input' && (
-          <MacInput onLookup={handleLookup} loading={loading} />
         )}
 
         {step === 'confirm' && (
