@@ -101,8 +101,7 @@
         });
       } else if (data.action === 'enableOtp') {
         var body = Object.assign({}, data.phone, { 'global-one-time-pass': 'yes' });
-        var mac = data.phone['device-provisioning-mac-address'];
-        promise = fetch(API_BASE + '/ns-api/v2/phones/' + mac, {
+        promise = fetch(API_BASE + '/ns-api/v2/domains/' + data.domain + '/phones', {
           method: 'PUT',
           headers: {
             Authorization: 'Bearer ' + data.token,
