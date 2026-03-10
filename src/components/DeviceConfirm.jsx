@@ -17,7 +17,7 @@ export default function DeviceConfirm({ phone, mac, onEnable, onBack, loading })
         </div>
         <div className="row">
           <span className="label">Model</span>
-          <span className="value">{phone['model-name'] || phone.model || 'Unknown'}</span>
+          <span className="value">{phone['device-models-brand-and-model'] || 'Unknown'}</span>
         </div>
         <div className="row">
           <span className="label">Domain</span>

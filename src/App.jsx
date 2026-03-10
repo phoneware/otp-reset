@@ -152,7 +152,7 @@ export default function App() {
         {step === 'result' && (
           <Result
             mac={mac}
-            model={phone?.['model-name'] || phone?.model || 'Unknown'}
+            model={phone?.['device-models-brand-and-model'] || 'Unknown'}
             onReset={handleReset}
           />
         )}
@@ -160,7 +160,7 @@ export default function App() {
         {step === 'result-error' && (
           <Result
             mac={mac}
-            model={phone?.['model-name'] || phone?.model || 'Unknown'}
+            model={phone?.['device-models-brand-and-model'] || 'Unknown'}
             error={error?.type === 'NETWORK_ERROR'
               ? 'A network error occurred while enabling OTP. Please try again.'
               : 'An unexpected error occurred.'}
