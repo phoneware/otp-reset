@@ -1,9 +1,6 @@
 export default function DeviceConfirm({ phone, mac, onEnable, onBack, loading }) {
   const otpEnabled = phone['global-one-time-pass'] === 'yes'
-  const line1 = phone.lines?.line?.[0]
-  const line1Display = line1
-    ? `${line1['display-name'] || line1.user || ''}@${line1.domain || ''}`
-    : 'N/A'
+  const line1Display = phone['device-provisioning-sip-uri-1'] || 'N/A'
 
   return (
     <div>
