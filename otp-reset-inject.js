@@ -29,40 +29,50 @@
       return;
     }
 
-    var contentEl = document.getElementById('content');
-    if (!contentEl) {
-      return;
+    // Wait for portal to finish initializing before replacing content
+    function loadOtpModule() {
+      var contentEl = document.getElementById('content');
+      if (!contentEl) {
+        return;
+      }
+
+      contentEl.innerHTML = '';
+
+      var token = localStorage.getItem('ns_t');
+      if (!token) {
+        contentEl.innerHTML =
+          '<div style="padding:40px;text-align:center;">' +
+          '<h3 style="color:#d9534f;">Authentication Error</h3>' +
+          '<p>Could not read authentication token. Please log in again.</p>' +
+          '</div>';
+        return;
+      }
+
+      // Create and insert iframe
+      var iframe = document.createElement('iframe');
+      iframe.id = 'otp-reset-frame';
+      iframe.src = SPA_URL;
+      iframe.style.border = 'none';
+      iframe.style.width = '100%';
+      iframe.style.minHeight = '400px';
+      iframe.scrolling = 'no';
+      contentEl.appendChild(iframe);
+
+      // Send auth data to iframe on load via postMessage
+      iframe.onload = function () {
+        iframe.contentWindow.postMessage(
+          { type: 'init', token: token, domain: domain },
+          SPA_ORIGIN
+        );
+      };
     }
 
-    contentEl.innerHTML = '';
-
-    var token = localStorage.getItem('ns_t');
-    if (!token) {
-      contentEl.innerHTML =
-        '<div style="padding:40px;text-align:center;">' +
-        '<h3 style="color:#d9534f;">Authentication Error</h3>' +
-        '<p>Could not read authentication token. Please log in again.</p>' +
-        '</div>';
-      return;
+    // Defer until after portal scripts finish (avoids "Container is not defined" from chart libs)
+    if (document.readyState === 'complete') {
+      setTimeout(loadOtpModule, 0);
+    } else {
+      window.addEventListener('load', loadOtpModule);
     }
-
-    // Create and insert iframe
-    var iframe = document.createElement('iframe');
-    iframe.id = 'otp-reset-frame';
-    iframe.src = SPA_URL;
-    iframe.style.border = 'none';
-    iframe.style.width = '100%';
-    iframe.style.minHeight = '400px';
-    iframe.scrolling = 'no';
-    contentEl.appendChild(iframe);
-
-    // Send auth data to iframe on load via postMessage
-    iframe.onload = function () {
-      iframe.contentWindow.postMessage(
-        { type: 'init', token: token, domain: domain },
-        SPA_ORIGIN
-      );
-    };
 
     var API_BASE = 'https://edge.phoneware.cloud';
 
