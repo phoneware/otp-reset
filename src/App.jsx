@@ -75,8 +75,16 @@ export default function App() {
     }
   }
 
-  function checkAuthorization() {
-    return true
+  function checkAuthorization(phoneData, phoneMac) {
+    if (session.user_scope === 'Super User') return true
+    if (phoneData.domain === session.domain) return true
+    setError({
+      type: 'ACCESS_DENIED',
+      mac: phoneMac,
+      domain: phoneData.domain,
+    })
+    setStep('error')
+    return false
   }
 
   async function handleEnable() {
